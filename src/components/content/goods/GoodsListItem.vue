@@ -1,5 +1,5 @@
 <template>
-    <div class="goods" >
+    <div class="goods" @click="itemClick">
         <img :src="goods.show.img"  alt="" >
         <div class="goods-info">
             <p>{{goods.title}}</p>
@@ -20,27 +20,14 @@
                 }
             }
         },
-        // mounted: function () {
-        //     // console.log(this.goods);
-        // },
-        //     methods: {
-        //         goToDetail: function () {
-        //             // 1.获取iid
-        //             let iid = this.goods.iid;
-        //
-        //             // 2.跳转到详情页面
-        //             this.$router.push({path: '/detail', query: {iid}})
-        //         }
-        //     },
-        //     computed: {
-        //         getImg() {
-        //             return this.goods.img || this.goods.image || this.goods.show.img
-        //         }
-        //     }
-        // }
         methods: {
-
+            itemClick () {
+                let iid = this.goods.iid
+                this.$router.push('/detail/' + iid)
+            }
         },
+
+
     }
 </script>
 

@@ -14,7 +14,10 @@
             <home-swiper :banners="banners"></home-swiper>
             <home-recommend :recommends="recommends"></home-recommend>
             <home-trend></home-trend>
-            <tab-control :titles="['流行','新款','精选']" @itemClick="tabClick"></tab-control>
+            <tab-control :titles="['流行','新款','精选']"
+                         @itemClick="tabClick"
+                         ref="tabControl"
+                         ></tab-control>
             <goods-list :goods-list="showGoodsList"></goods-list>
         </scroll>
         <back-top @click.native="backTop" v-show="showBackTop"></back-top>
@@ -32,7 +35,6 @@
     import BackTop from "../../components/content/backTop/BackTop";
     import {NEW, POP, SELL,BACKTOP_DISTANCE } from "../../common/const";
     import {getHomeMultidata,getHomeData,} from "../../network/home";
-
 
     export default {
         name: "Home",
@@ -57,8 +59,9 @@
                     'sell': {page: 1, list: []}
                 },
                 currentType: POP,
-                tabOffsetTop: 0,
-                showBackTop: false
+                tabOffsetTop: 545,
+                showBackTop: false,
+                isTabFixed: false,
             }
         },
 
@@ -68,11 +71,15 @@
             this.getHomeProducts(NEW)
             this.getHomeProducts(SELL)
         },
+        destroyed() {
+            console.log('------')
+        },
         computed: {
             showGoodsList() {
                 return this.goods[this.currentType].list
             }
         },
+
         methods :{
             tabClick(index) {
                 switch (index) {
@@ -88,10 +95,7 @@
                 }
             },
             contentScroll(position) {
-                // 1.决定tabFixed是否显示
-                this.isTabFixed = position.y < -this.tabOffsetTop
-
-                // 2.决定backTop是否显示
+                //决定backTop是否显示
                 this.showBackTop = position.y < -BACKTOP_DISTANCE
             },
             backTop (){
@@ -140,5 +144,12 @@
         right: 0;
 
     }
+    .fixed {
+        position: fixed;
+        top: 44px;
+        left: 0;
+        right: 0;
+    }
+
 
 </style>

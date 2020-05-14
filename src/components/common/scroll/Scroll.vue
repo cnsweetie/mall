@@ -33,10 +33,10 @@
         },
         methods: {
             finishPullUp() {
-                this.scroll.finishPullUp()
+                this.scroll && this.scroll.finishPullUp()
             },
             refresh() {
-                this.scroll.refresh()
+                this.scroll && this.scroll.refresh()
             },
         },
         mounted() {
