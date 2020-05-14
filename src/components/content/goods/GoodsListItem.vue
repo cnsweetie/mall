@@ -1,6 +1,6 @@
 <template>
     <div class="goods" >
-        <img :src="goods.show.img"  alt="">
+        <img :src="goods.show.img"  alt="" >
         <div class="goods-info">
             <p>{{goods.title}}</p>
             <span class="price">¥{{goods.price}}</span>
@@ -38,24 +38,29 @@
         //         }
         //     }
         // }
+        methods: {
+
+        },
     }
 </script>
 
 <style scoped>
     .goods {
-        padding-bottom: 40px;
-        position: relative;
+        padding-bottom: 20px;
     }
     .goods img {
         width: 100%;
+        height: 92%;
+        border-radius: 5px;
     }
 
     .goods-info {
         font-size: 12px;
-        position: absolute;
-        bottom: 5px;
+        position: relative;
+        top: 10px;
         left: 0;
         right: 0;
+        bottom: 5px;
         overflow: hidden;
         text-align: center;
     }
@@ -83,5 +88,6 @@
         top: 0;
         width: 14px;
         height: 14px;
+        background: url("~assets/img/common/collect.svg") 0 0/13px 13px;
     }
 </style>

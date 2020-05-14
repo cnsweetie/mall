@@ -3,11 +3,21 @@
 <template>
     <div id="home">
         <nav-bar class="home-nav"><div slot="center">Shopping</div></nav-bar>
-        <home-swiper :banners="banners"></home-swiper>
-        <home-recommend :recommends="recommends"></home-recommend>
-        <home-trend></home-trend>
-        <tab-control :titles="['流行','新款','精选']" @itemClick="tabClick"></tab-control>
-        <goods-list :goods-list="showGoodsList"></goods-list>
+        <scroll class="content"
+                ref="scroll"
+                @scroll="contentScroll"
+                @pullingUp="lodeMore"
+                :data="showGoodsList"
+                :pull-up-load="true"
+                :probe-type="3"
+                >
+            <home-swiper :banners="banners"></home-swiper>
+            <home-recommend :recommends="recommends"></home-recommend>
+            <home-trend></home-trend>
+            <tab-control :titles="['流行','新款','精选']" @itemClick="tabClick"></tab-control>
+            <goods-list :goods-list="showGoodsList"></goods-list>
+        </scroll>
+        <back-top @click.native="backTop" v-show="showBackTop"></back-top>
     </div>
 </template>
 
@@ -18,8 +28,10 @@
     import HomeTrend from "./childCpn/HomeTrend";
     import TabControl from "../../components/content/tabControl/TabControl";
     import GoodsList from "../../components/content/goods/GoodsList";
-    import {NEW, POP, SELL } from "../../common/const";
-    import {getHomeMultidata,getHomeData} from "../../network/home";
+    import Scroll from "../../components/common/scroll/Scroll";
+    import BackTop from "../../components/content/backTop/BackTop";
+    import {NEW, POP, SELL,BACKTOP_DISTANCE } from "../../common/const";
+    import {getHomeMultidata,getHomeData,} from "../../network/home";
 
 
     export default {
@@ -30,7 +42,9 @@
             HomeRecommend,
             HomeTrend,
             TabControl,
-            GoodsList
+            GoodsList,
+            Scroll,
+            BackTop
         },
 
         data() {
@@ -43,6 +57,8 @@
                     'sell': {page: 1, list: []}
                 },
                 currentType: POP,
+                tabOffsetTop: 0,
+                showBackTop: false
             }
         },
 
@@ -71,6 +87,20 @@
                         break
                 }
             },
+            contentScroll(position) {
+                // 1.决定tabFixed是否显示
+                this.isTabFixed = position.y < -this.tabOffsetTop
+
+                // 2.决定backTop是否显示
+                this.showBackTop = position.y < -BACKTOP_DISTANCE
+            },
+            backTop (){
+                this.$refs.scroll.scroll.scrollTo(0,0,500)
+            },
+            lodeMore() {
+                this.getHomeProducts(this.currentType)
+            },
+
             getHomeMultidata() {
                 getHomeMultidata().then(res => {
                     this.banners = res.data.banner.list
@@ -82,8 +112,7 @@
                     const goodsList = res.data.list;
                     this.goods[type].list.push(...goodsList)
                     this.goods[type].page += 1
-
-                    //this.$refs.scroll.finishPullUp()
+                    this.$refs.scroll.finishPullUp()
                 })
             }
         }
@@ -92,7 +121,7 @@
 
 <style scoped>
     #home{
-        padding-top: 44px;
+        height: 100vh;
     }
     .home-nav {
         background-color: lightpink;
@@ -101,6 +130,15 @@
         left: 0;
         right: 0;
         top: 0px;
-        z-index: 5;
+        z-index: 1;
     }
+    .content{
+        position: absolute;
+        top: 44px;
+        bottom: 49px;
+        left: 0;
+        right: 0;
+
+    }
+
 </style>
