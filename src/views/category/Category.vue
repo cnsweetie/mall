@@ -102,6 +102,7 @@
             <li>hahaha199</li>
             <li>hahaha1100</li>
         </ul>
+        <div class="mes">This is a ScrollDemo</div>
     </div>
 </template>
 
@@ -119,8 +120,17 @@
 
 <style scoped>
     .wrapper{
+        position: fixed;
+        top: 50px;
+        width: 100%;
         height: 150px;
-        background-color: red;
+        background-color: lightpink;
         overflow: hidden;
+    }
+    .mes{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
     }
 </style>

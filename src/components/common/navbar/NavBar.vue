@@ -18,6 +18,7 @@
         height: 44px;
         line-height: 44px;
         text-align: center;
+        z-index: 9;
         box-shadow: 1px 1px 1px rgba(100,100,100,0.1);
 
     }

@@ -17,7 +17,9 @@
             <detail-comment-info ref="comment" :comment-info="commentInfo"/>
             <detail-recommend-info ref="recommend" :recommend-list="recommendList"></detail-recommend-info>
         </scroll>
-
+        <back-top @click.native="backTop" v-show="showBackTop"></back-top>
+        <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
+        <toast :show="showToast"></toast>
     </div>
 </template>
 
@@ -31,9 +33,13 @@
     import DetailParamInfo from "./childCpn/DetailParamInfo";
     import DetailCommentInfo from "./childCpn/DetailCommentInfo";
     import DetailRecommendInfo from "./childCpn/DetailRecommendInfo";
+    import DetailBottomBar from "./childCpn/DetailBottomBar";
+    import BackTop from "../../components/content/backTop/BackTop";
+    import Toast from "../../components/common/toast/Toast";
 
     import {getDetail, Goods, Shop, GoodsParam, getRecommend} from "network/detail";
     import {debounce} from "../../common/utils";
+    import {BACKTOP_DISTANCE} from "../../common/const";
 
     export default {
         name: "Detail",
@@ -46,6 +52,9 @@
             DetailParamInfo,
             DetailCommentInfo,
             DetailRecommendInfo,
+            DetailBottomBar,
+            BackTop,
+            Toast,
             Scroll
         },
         data() {
@@ -60,6 +69,8 @@
                 recommendList: [],
                 themeTopY: [],
                 debounceThemeTop: null,
+                showBackTop: false,
+                showToast: false,
                 currentIndex: 0
             }
         },
@@ -70,14 +81,32 @@
             titleClick(index) {
                 this.$refs.scroll.scroll.scrollTo(0, -this.themeTopY[index], 500)
             },
+
             loadImg() {
                 this.debounceThemeTop()
             },
-            contentScroll(position) {
-                // 1.监听backTop的显示
-                //this.showBackTop = position.y < -BACKTOP_DISTANCE
 
-                // 2.监听滚动到哪一个主题
+            backTop (){
+                this.$refs.scroll.scroll.scrollTo(0,0,500)
+            },
+
+            addToCart () {
+                const obj = {}
+                obj.iid = this.iid;
+                obj.imgURL = this.topImages[0]
+                obj.title = this.goods.title
+                obj.desc = this.goods.desc;
+                obj.newPrice = this.goods.nowPrice;
+                this.$store.commit('addCart', obj)
+                this.showToast = !this.showToast
+                setTimeout(() =>{
+                    this.showToast = !this.showToast
+                },2000)
+            },
+
+            contentScroll(position) {
+                this.showBackTop = position.y < -BACKTOP_DISTANCE
+
                 this._listenScrollTheme(-position.y)
             },
 
@@ -91,7 +120,6 @@
                             this.currentIndex = i;
                         }
                         this.$refs.nav.currentIndexx = this.currentIndex
-                        console.log(this.currentIndex)
                         break;
                     }
 
