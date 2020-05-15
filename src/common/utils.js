@@ -16,9 +16,22 @@ export function formatDate(date, fmt) {
     }
   }
   return fmt;
-};
+}
 
 function padLeftZero (str) {
   return ('00' + str).substr(str.length);
-};
+}
+
+export function debounce(func,delay) {
+  let timer = null
+  return function (...args) {
+    if(timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      func(...args)
+    },delay)
+
+  }
+}
 

@@ -4,7 +4,7 @@
         <div class="title" slot="center">
             <span class="title-item"
             v-for="(item, index) in titleInfos" :key="index"
-            :class="{'active': index===currentIndex}"
+            :class="{'active': index===currentIndexx}"
              @click="itemClick(index)">
         {{item}}
             </span>
@@ -20,6 +20,11 @@
         components: {
             NavBar
         },
+        data (){
+          return{
+              currentIndexx: this.currentIndex
+          }
+        },
         props: {
             titleInfos: {
                 type: Array,
@@ -34,7 +39,7 @@
         },
         methods: {
             itemClick (index){
-                this.currentIndex = index
+                this.$emit('itemClick', index)
             },
             backClick() {
                 this.$router.back()
