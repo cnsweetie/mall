@@ -38,6 +38,7 @@
 <style scoped>
     .goods {
         padding-bottom: 20px;
+        width: 48%;
     }
     .goods img {
         width: 100%;
@@ -48,7 +49,7 @@
     .goods-info {
         font-size: 12px;
         position: relative;
-        top: 10px;
+        top: 4px;
         left: 0;
         right: 0;
         bottom: 5px;
